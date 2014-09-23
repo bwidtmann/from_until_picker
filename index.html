@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+        <script src="js/date.js"></script>
+        <script src="js/date_time_picker.js"></script>
+        <script src="js/from_until_picker.js"></script>
+    </head>
+    <body>
+        
+      <p>Hello world! This is the FromUntilPicker!</p>
+      <div id="from_until_picker"></div>
+      <script>
+            $(document).ready(function() {
+                $('#from_until_picker').from_until_picker().on('from_until_picker_change', function () {console.log('on change!!!')});
+                $('#from_until_picker').from_until_picker('setDefaults');
+            });
+      </script>
+    </body>
+</html>
