@@ -14,7 +14,8 @@
         },
         _onchange: function(event) {
             event.stopPropagation();
-            this._validate_date();
+            this.enableHours();
+            this._validateDateTime();
         },
         _initTime: function() {
             for(var i = Date.today(); i.isBefore(Date.today().add(+1).days()); i.add(+30).minutes()){
@@ -23,11 +24,14 @@
                 );
             }
         },
-        _validate_date: function() {
+        _validateDateTime: function() {
             try {
                 $.datepicker.parseDate('D, dd.mm.yy', this.date_picker.val());
                 if (this.getDateTime().isAfter(new Date())) {
                     console.log('DateTime is now: ' + this.getDateTime());
+                    if (this.getDate().equals(Date.today())) {
+                        this.disableHours((new Date()).getHours());
+                    }
                     this._trigger('_change', event, {target: this});
                 } else {
                     throw '';
@@ -35,6 +39,7 @@
             }
             catch(e) {
                 console.log('UPS!!!!!!!!!!!!!!!!!!!');
+                //this.message.html('Invalid date!');
                 this.reset();
             }
         },
@@ -66,8 +71,15 @@
         reset: function() {
             console.log('reset');
             this.setDateTime(this.previous_date_time);
+            this.date_picker.blur();
+        },
+        enableHours: function() {
+            $.each(this.time_picker.find('option'), function(index, option) {
+                $(option).attr('disabled', false);
+            });
         },
         disableHours: function(hour) {
+            console.log('disableHours: ' + hour);
             $.each(this.time_picker.find('option'), function(index, option) {
                 if(parseInt($(option).text().split(':')[0]) <= hour) {
                     $(option).attr('disabled', true);
