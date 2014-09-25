@@ -13,7 +13,8 @@
             this.time_picker.on('change', $.proxy(this._onchange, this));
         },
         _onchange: function(event) {
-            event.stopPropagation();
+            console.log('onchange date_time_picker');
+            //event.stopPropagation();
             this.enableHours();
             this._validateDateTime();
         },
@@ -63,7 +64,7 @@
             this.time_picker.find('option:selected').attr('selected', false);
             this.time_picker.find('option[value="' + date_time.toString("HH:mm") + '"]').attr('selected', true);
             this.setPreviousDateTime(date_time);
-
+            //this._onchange();
         },
         setPreviousDateTime: function() {
             this.previous_date_time = this.getDateTime();
@@ -86,6 +87,10 @@
                     $(option).attr('selected', false);
                 }
             });
+        },
+        disableDays: function(min_date) {
+            console.log('disableDays: ' + min_date);
+            this.date_picker.datepicker('option', 'minDate', min_date);
         }
     });
 })(jQuery);

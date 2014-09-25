@@ -27,6 +27,7 @@
             } else {
                 this._trigger( "_change", event, { } );
                 options.target.setPreviousDateTime();
+                this.until_picker.date_time_picker('disableDays', this.from_picker.date_time_picker('getDateTime'));
                 this.displayDays();
             }
 
