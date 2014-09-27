@@ -1,10 +1,8 @@
 (function($) {
     $.widget('12auto.date_time_picker', {
         _create: function() {
-            var date_picker = $('<input>').appendTo(this.element);
-            var time_picker = $('<select>').appendTo(this.element);
-            this.date_picker = date_picker.datepicker({ dateFormat: 'D, dd.mm.yy', showAnim: '', numberOfMonths: 2, minDate: 0 });
-            this.time_picker = time_picker;
+            this.date_picker = $('<input>').appendTo(this.element).datepicker({ dateFormat: 'D, dd.mm.yy', showAnim: '', numberOfMonths: 2, minDate: 0 });
+            this.time_picker = $('<select>').appendTo(this.element);
             this._initTime();
 
             this.element.addClass( "date_time_picker" );
@@ -14,7 +12,7 @@
         },
         _onchange: function(event) {
             console.log('onchange date_time_picker');
-            //event.stopPropagation();
+            event.stopPropagation();
             this.enableHours();
             this._validateDateTime();
         },
@@ -80,7 +78,6 @@
             });
         },
         disableHours: function(hour) {
-            console.log('disableHours: ' + hour);
             $.each(this.time_picker.find('option'), function(index, option) {
                 if(parseInt($(option).text().split(':')[0]) <= hour) {
                     $(option).attr('disabled', true);
@@ -89,7 +86,6 @@
             });
         },
         disableDays: function(min_date) {
-            console.log('disableDays: ' + min_date);
             this.date_picker.datepicker('option', 'minDate', min_date);
         }
     });

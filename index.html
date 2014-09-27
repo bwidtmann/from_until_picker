@@ -16,7 +16,7 @@
       <div id="from_until_picker"></div>
       <script>
             $(document).ready(function() {
-                $('#from_until_picker').from_until_picker().on('from_until_picker_change', function () {console.log('on change!!!')});
+                $('#from_until_picker').from_until_picker().on('change', function () {console.log('on change!!!')});
                 $('#from_until_picker').from_until_picker('setDefaults');
             });
       </script>
