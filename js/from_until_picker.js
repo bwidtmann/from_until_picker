@@ -12,28 +12,36 @@
 
             this.message = $('<div>').appendTo(this.element);
             this.element.addClass( "from_until_picker" );
+
             this.from_picker.element.on('date_time_picker_change', $.proxy(this._onchange, this));
             this.until_picker.element.on('date_time_picker_change', $.proxy(this._onchange, this));
         },
         _onchange: function(event, options) {
             console.log('onchange from_until_picker');
+            //only trigger change event if validation was successful
             if (this._validateDateTime(options.target)) {
                 this.element.trigger('change');
             }
         },
         _validateDateTime: function(target) {
-            if(this.until_picker.getDateTime().isBefore(this.from_picker.getDateTime())){
+            //check if until date is after from date
+            if(this.until_picker.getDateTime().isAfter(this.from_picker.getDate())){
+                //check if from date on same day as until date -> should disable hours of from picker in until picker
+                if (this.from_picker.getDate().equals(this.until_picker.getDate())) {
+                    this.until_picker.disableHours(this.from_picker.getDateTime().getHours() + 1);
+                } else {
+                    this.until_picker.enableHours();
+                }
+                //always disable days of from picker in until picker
+                this.until_picker.disableDays(this.from_picker.getDateTime());
+
+                target.setPreviousDateTime();
+                this.displayDays();
+                return true;
+            } else {
                 this.message.html('Invalid date!');
                 target.reset();
                 return false;
-            } else {
-                target.setPreviousDateTime();
-                this.until_picker.disableDays(this.from_picker.getDateTime());
-                if (this.from_picker.getDate().equals(this.until_picker.getDate())) {
-                    this.until_picker.disableHours(this.from_picker.getDateTime().getHours());
-                }
-                this.displayDays();
-                return true;
             }
         },
         setDefaults: function() {

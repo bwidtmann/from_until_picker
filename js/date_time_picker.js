@@ -12,8 +12,8 @@
         },
         _onchange: function(event) {
             console.log('onchange date_time_picker');
+            //we want to trigger the change event manually only if validation was successful
             event.stopPropagation();
-            this.enableHours();
             this._validateDateTime();
         },
         _initTime: function() {
@@ -25,20 +25,21 @@
         },
         _validateDateTime: function() {
             try {
+                //check if manual input is valid date format
                 $.datepicker.parseDate('D, dd.mm.yy', this.date_picker.val());
-                if (this.getDateTime().isAfter(new Date())) {
-                    console.log('DateTime is now: ' + this.getDateTime());
+                //check if date is not in the past
+                if (this.getDateTime().isAfter(Date.today())) {
+                    //check if date is today -> should disable hours in the past
                     if (this.getDate().equals(Date.today())) {
                         this.disableHours((new Date()).getHours());
                     }
                     this._trigger('_change', event, {target: this});
                 } else {
-                    throw '';
+                    throw 'date is in the past!';
                 }
             }
             catch(e) {
-                console.log('UPS!!!!!!!!!!!!!!!!!!!');
-                //this.message.html('Invalid date!');
+                //TODO: display error
                 this.reset();
             }
         },
@@ -62,11 +63,12 @@
             this.time_picker.find('option:selected').attr('selected', false);
             this.time_picker.find('option[value="' + date_time.toString("HH:mm") + '"]').attr('selected', true);
             this.setPreviousDateTime(date_time);
-            //this._onchange();
         },
+        //remember old date time in order to restore later in case of failed validations (see reset())
         setPreviousDateTime: function() {
             this.previous_date_time = this.getDateTime();
         },
+        //new input is not valid -> restore previous date time (see setPreviousDateTime())
         reset: function() {
             console.log('reset');
             this.setDateTime(this.previous_date_time);
@@ -78,6 +80,7 @@
             });
         },
         disableHours: function(hour) {
+            this.enableHours();
             $.each(this.time_picker.find('option'), function(index, option) {
                 if(parseInt($(option).text().split(':')[0]) <= hour) {
                     $(option).attr('disabled', true);
